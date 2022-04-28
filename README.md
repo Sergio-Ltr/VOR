@@ -10,10 +10,7 @@ Two periodic threads are used:
 
 
 
-The vision thread only handles image related tasks: it connects to the camera port, compute 
-
-the estimation of the sphere center(assuming it is red), and send the result to an internal buffered port. This result is required by the movement thread at each cycle, after having imposed the sinusoidal movement of the head. Once the coordinates have been received, difference with respect to the desired position (160,120) is computed and used to correct eyes position. Only a proportional correction term has been implemented, with empirically found values for the K constant, which differs for the X and the Y axis stabiliziation. Horizontal one requires a negative term. 
-
+The vision thread only handles image related tasks: it connects to the camera port, computes the estimation of the sphere center(assuming it is red), and send the result to an internal buffered port. This result is required by the movement thread at each cycle, after having imposed the sinusoidal movement of the head. Once the coordinates have been received, difference with respect to the desired position (160,120) is computed and used to correct eyes position. Only a proportional correction term has been implemented, with empirically found values for the K constant, which differs for the X and the Y axis stabiliziation. Horizontal one requires a negative term. 
 
 
 An additional experimentation was proposed. Since different values of KPx and KPy seemed to be required when the head movement speed changed, intuition was the one to use the frequence of the sinusoidal movement as a multiplication factor for both the KPs, douboing them at each iteration too. This solution seems to work better in terms of stability of the sphere at the center of the view. It is still possible to use the constant KPs just adding the -sg option when executing this program (more instructions at the bottom of the README file).
