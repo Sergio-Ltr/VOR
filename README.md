@@ -29,7 +29,7 @@ To lounch the VOR application cd to the project directory:
 
 ```bash
 
-cd <yourpath>/VOR
+cd <yourpath>/VOR-YARP
 
 ```
 
