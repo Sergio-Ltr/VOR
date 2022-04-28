@@ -120,14 +120,13 @@ class EyeMover : public PeriodicThread {
                 int xDiff = 160 - xSphereCenter;
                 int yDiff = 120 - ySphereCenter;
 
-                double gainFactor = 0.1;
+                double gainFactor = 0.1; //In case we do not scale by freq, we need a 10^-1 factor. 
 
                 //Scale gain (and so error correction) according to movement frequence.
                 //If user impose a static gain, then this skip will be0 skipped.
                 if(!staticGain){
                     gainFactor = frequence;
                 }
-                
 
                 //We change gain according to osccilation frequence. 
                 double kpX = -3.6 * gainFactor; //We need negative gain for horiziontal stability.
@@ -136,8 +135,6 @@ class EyeMover : public PeriodicThread {
                 // Sum u(t) and current encoders position.
                 moveHead(4, xDiff * kpX + hEyeEnc);
                 moveHead(3, yDiff * kpY + vEyeEnc);
-
-                std::cout << xDiff * kpX << " + "<< hEyeEnc << "\n";
             }
         }
     
@@ -303,6 +300,16 @@ class RobotVision : public PeriodicThread {
 };
 
 int main(int argc, char *argv[]) {
+    //Check if user imposed static gain constants.
+    bool staticGain = false;
+    
+    if(argc > 1 && argv[1] == string("-sg")){
+    	staticGain = true;
+    	std::cout << "Static gain imposed for the controler." << "\n";
+    } else {
+    	std::cout << "Scaling gain according to frequence variation." << "\n";
+    }
+  
     //Frequency of movement
     double MOVEMENT_FREQ = 0.05; 
 
@@ -348,7 +355,7 @@ int main(int argc, char *argv[]) {
     worldRpc.write(req);
 
     // We should not need this port anymore. 
-    // worldRpc.close();
+    worldRpc.close();
     
     RobotVision vision = RobotVision(MOVEMENT_FREQ);
     vision.start();
@@ -363,7 +370,7 @@ int main(int argc, char *argv[]) {
         std::cout << "Frequence: " << freq << "\n";
 
         //Create the thred to move eyes.
-        EyeMover eyeMover = EyeMover(MOVEMENT_FREQ, AMPLITUDES_DEG, freq);
+        EyeMover eyeMover = EyeMover(MOVEMENT_FREQ, AMPLITUDES_DEG, freq, staticGain);
         
         //Begin moving eyes.
         eyeMover.start();
@@ -387,5 +394,4 @@ int main(int argc, char *argv[]) {
 
     return 0; 
 }
-
 
