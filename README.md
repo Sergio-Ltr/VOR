@@ -20,7 +20,7 @@ In order to carry on the simulation, you can enamble the left camera view with t
 ```bash
 
 yarpview --name /viewer & 
-yarp rpc /icubSim/cam/left /viewer
+yarp connect /icubSim/cam/left /viewer
 
 ```
 
