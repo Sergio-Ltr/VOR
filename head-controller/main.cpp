@@ -357,7 +357,7 @@ int main(int argc, char *argv[]) {
     // We should not need this port anymore. 
     worldRpc.close();
     
-    RobotVision vision = RobotVision(MOVEMENT_FREQ);
+    RobotVision vision(MOVEMENT_FREQ);
     vision.start();
 
     // Loop through scheduled movements.
@@ -370,7 +370,7 @@ int main(int argc, char *argv[]) {
         std::cout << "Frequence: " << freq << "\n";
 
         //Create the thred to move eyes.
-        EyeMover eyeMover = EyeMover(MOVEMENT_FREQ, AMPLITUDES_DEG, freq, staticGain);
+        EyeMover eyeMover(MOVEMENT_FREQ, AMPLITUDES_DEG, freq, staticGain);
         
         //Begin moving eyes.
         eyeMover.start();
